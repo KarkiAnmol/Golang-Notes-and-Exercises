@@ -1,0 +1,44 @@
+                     **Exercise 1: Declare and Initialize Variables**
+
+Write a Go program that declares and initializes variables of various data types
+ (int, float64, string, boolean) and prints their values.
+
+
+                     **Exercise 2: Swapping Variables**
+Create a Go program that swaps the values of two integer variables without using a temporary variable.
+
+
+
+                     **Exercise 3: User Input and Arithmetic**
+
+Write a Go program that takes two integer inputs from the user, performs
+ arithmetic operations (addition, subtraction, multiplication, division), and prints the results.
+                     
+                     
+                     **Exercise 4: Constants**
+
+Declare a constant in Go to represent the value of pi (3.14159265), and use
+it to calculate the circumference of a circle with a given radius.
+                     
+                     
+                     **Exercise 5: Temperature Conversion**
+
+Develop a program that converts temperatures from Celsius to Fahrenheit. Declare a variable
+ for the Celsius temperature, convert it to Fahrenheit, and print the result.
+     
+     
+                     **Exercise 6: Area of a Rectangle**
+
+Create a Go program that calculates the area of a rectangle. Declare variables for
+ the length and width, and then compute and print the area.
+                     
+                     
+                     **Exercise 7: Age in Dog Years**
+
+Write a Go program that takes a user's age as input and calculates and prints their age in dog years
+ (multiply the age by 7).
+                     
+                     
+                     
+
+
