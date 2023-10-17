@@ -1,7 +1,7 @@
 // -------------------------------NOTE-----------
 // Strings and Runes and Bytes
 var s string = "Hello there"
-var b byte = s[6] // valid
+var b byte = s[6] // valid 
 
 var s string = "Hello there" //here code point in UTF-8 can be anywhere from 1 to 8 bytes long
 // slicing to make substrings
@@ -9,7 +9,7 @@ var s2 string = s[4:7] // s2 = "o t"
 var s3 string = s[:5] // s3= "Hello"
 var s4 string = s[6:] // s4= "there"
 
-//when using emojis code point in UTF-8 can be several bytes long
+//when using emojis, code point in UTF-8 can be several bytes long
 var s string = "Hello 🐍" // len(s)= 4 bytes long
 var s3 string = s[:5] // "Hello"	
 var s2 string = s[4:7] // "o ?" --It's because we only copied the first byte of the emoji's code point which is invalid
@@ -52,9 +52,9 @@ fmt.Println(rs)
 // 		whose values are below 128 (which includes all of the letters, numbers, and punctuation commonly used in English), 
 //      but expands to a maximum of four bytes(4) to represent Unicode code points with larger values
 // --> pros: I) no need to worry about little endian vs big endian
-//			 II) It also allows you to look at any byte in a sequence and tell if you are at the start of a
+//			    II) It also allows you to look at any byte in a sequence and tell if you are at the start of a
 //               UTF-8 sequence, or somewhere in the middle
 // --> cons: I) you cannot randomly access a string encoded with UTF-8.
-//			II) While you can detect if you are in the middle of a character, you can’t tell how many
+//		     	II) While you can detect if you are in the middle of a character, you can’t tell how many
 //				characters in you are.You need to start at the beginning of the string and count.
 

@@ -1,4 +1,3 @@
-
                             **Problem 1: Slice Basics**
 Write a Go program that declares a slice of integers, appends values to it, 
 and prints the slice's length, capacity, and elements.

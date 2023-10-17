@@ -1,0 +1,18 @@
+
+**Maps:**
+
+1. **Basic Map Operation:** 
+Create a map that stores the names of people as keys and their ages as values. Add a few entries, delete one, and print the map.
+
+2. **Iterating Over a Map:** 
+Write a program that iterates over a map of cities and their populations, and prints the city names with populations over one million.
+
+3. **Nested Maps:** 
+Build a nested map structure that represents a library catalog. The outer map should use categories as keys, and the inner maps should contain books and their availability. Perform operations to add, remove, and display books.
+
+4. **Map of Slices:** 
+Create a map where keys are string names of cities and values are slices of the top three tourist attractions in each city. Print the attractions for a specific city.
+
+5. **Map of Functions:** 
+Create a map that associates math operations (addition, subtraction, multiplication, division) with corresponding functions. Allow the user to select an operation and perform it on two numbers.
+

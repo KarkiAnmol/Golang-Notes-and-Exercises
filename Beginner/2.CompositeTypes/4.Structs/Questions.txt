@@ -1,0 +1,20 @@
+                                **Structs:**
+
+1. **Create a Struct:** 
+Define a struct named "Person" with fields for a person's name, age, and address. Create instances of the struct and print their details.
+
+2. **Methods on Structs:** 
+Add a method to the "Person" struct that calculates the person's birth year based on their age. Use this method to display the birth year of a person.
+
+3. **Struct Composition:** 
+Create a struct "Rectangle" with fields for width and height. Embed a "Location" struct within "Rectangle" to represent the location of the rectangle's top-left corner. Display the full details of a rectangle, including its location.
+
+4. **Struct Initialization:** 
+Define a struct representing a book with fields for title, author, and publication year. Create an initializer function that returns a new book instance.
+
+5. **Nested Structs:** 
+Create a struct "University" that contains fields for the university's name and location. Then, create a struct "Student" that contains fields for the student's name, age, and the university they attend. Create a student and display their details, including university information.
+
+6. **JSON Encoding and Decoding:** 
+Create a struct representing a person and encode it to JSON. Then, decode the JSON back into a person struct and print the person's details.
+
