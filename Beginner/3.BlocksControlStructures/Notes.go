@@ -294,6 +294,11 @@ standard for loop is a clearer way to indicate the start and end of your iterati
 
 //switch
 // Example  The switch statement
+//You can switch on any type that can be compared with ==, which includes
+// all of the built-in types except slices, maps, channels, functions, and structs that con‐
+// tain fields of these types.
+
+//the need for a break statement might indicate that you are doing something too complicated
 words := []string{"a", "cow", "smile", "gopher", "octopus", "anthropologist"}
 
 for _, word := range words {
@@ -313,3 +318,15 @@ a is a short word!
 cow is a short word!
 smile is exactly the right length: 5
 anthropologist is a long word!
+
+
+//Blank Switch 
+// A regular switch only allows you to check a value for equality. A blank
+// switch allows you to use any boolean comparison for each case.
+
+//Favor blank switch statements over if/else chains when you have
+// multiple related cases. to make it more readable and idiomatic
+
+//goto
+//So what should you use goto for? Mostly, you shouldn’t. Labeled break and continue
+// statements allow you to jump out of deeply nested loops or skip iteration.
