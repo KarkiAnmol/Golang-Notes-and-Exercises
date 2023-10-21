@@ -118,7 +118,139 @@ func main() {
 	fmt.Println(x) // prints 20
 }
 
+
+
 //Pointers Are a Last Resort
+//Pointers make it harder to understand data flow and can create extra work for garbage collector 
+
+//Rather than populating a struct by passing a pointer to it into a function, have
+// the function instantiate and return the struct
+
+// Example 6-3. Don’t do this
+func MakeFoo(f *Foo) error {
+	f.Field1 = "val"
+	f.Field2 = 20
+	return nil
+}
+
+// Example 6-4. Do this
+func MakeFoo() (Foo, error) {
+	f := Foo{
+		Field1: "val",
+		Field2: 20,
+	}
+	return f, nil
+}
+
+//The only time you should use pointer parameters to modify a variable is when the
+// function expects an interface. You see this pattern when working with JSON
+
+//When returning values from a function, you should favor value types. Only use a
+// pointer type as a return type if there is state within the data type that needs to be  modified.
+
+
+//Pointer Passing Performance
+/*
+If a struct is large enough, there are performance improvements from using a pointer
+to the struct as either an input parameter or a return value.
+the size of a pointer is the same for all data types. Passing a value into a func‐
+tion takes longer as the data gets larger. so it makes sense to use pointer to make the program faster*/
+
+//For data structures that are smaller than a megabyte, it is actually slower to return a
+// pointer type than a value type
+
+//For the vast majority of cases, the
+// difference between using a pointer and a value won’t affect your program’s perfor‐
+// mance. But if you are passing megabytes of data between functions, consider using a
+// pointer even if the data is meant to be immutable.
+
+
+
+//The Zero Value Versus No Value
+/*
+Nil pointers can be used to distinguish zero value in your program when the distinction matters,but we don't
+prefer to use it because using pointer means making the value mutable, so we instead prefer the comma ok idiom
+*/
+
+//within the Go runtime, a map is imple‐
+// mented as a pointer to a struct. Passing a map to a function means that you are copy‐
+// ing a pointer.this is why  any modifications made to a map that's passed to a function are reflected in the original value
+// that was passed in
+//Because of this, you should avoid using maps for input parameters or return values,
+// especially on public APIs
+
+// Go is a strongly typed language; rather than passing a map around, use a struct
+
+
+// Passing slice to a function has more complicated behaviour because any modifications made to the contents of the slice is reflected
+// in the original value but using append to change the length isn't reflected in the original value, even if the slice has capacity 
+// greater than its length.
+// That’s because a slice is implemented as a struct with three fields: 
+		// 1. an int field for length
+		// 2. an int field for capacity, and 
+		// 3. a pointer to a block of memory.
+// Changing the values in the slice changes the memory that the pointer points to, so the
+// changes are seen in both the copy and the original
+
+// Changes to the length and capacity are not reflected back in the original, because they are only in the copy.
+//  Changing the capacity means that the pointer is now pointing to a new, bigger block of memory.
+
+
+//By default, you should assume that a slice is not modified by a function.
+// Your function’s documentation should specify if it modifies the slice’s contents.
+
+
+/*
+********IMPORTANT **
+
+The reason you can pass a slice of any size to a function is that the
+data that’s passed to the function is the same for any size slice: two
+int values and a pointer. The reason that you can’t write a function
+that takes an array of any size is because the entire array is passed
+to the function, not just a pointer to the data.
+
+*/
+
+//Slices as Buffers
+
+/*
+Even though Go is a garbage-collected language, writing idiomatic Go means avoid‐
+ing unneeded allocations. Rather than returning a new allocation each time we read
+from a data source, we create a slice of bytes once and use it as a buffer to read data
+from the data source:
+*/
+
+file, err := os.Open(fileName)
+if err != nil {
+		return err
+}
+ defer file.Close()
+ data := make([]byte, 100)
+ for {
+		count, err := file.Read(data)
+		if err != nil {
+		return err
+		}		
+if count == 0 {
+	return nil
+}
+process(data[:count])
+}
+// Remember that we can’t change the length or capacity of a slice when we pass it to a
+// function, but we can change the contents up to the current length. In this code, we
+// create a buffer of 100 bytes and each time through the loop, we copy the next block of
+// bytes (up to 100) into the slice. We then pass the populated portion of the buffer to
+// process.
+
+
+
+//Reducing the Garbage Collector’s Workload
+/*
+
+*/
+
+
+
 
 
 
