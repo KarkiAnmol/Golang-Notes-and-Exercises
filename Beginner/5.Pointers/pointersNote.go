@@ -72,3 +72,53 @@ p := person{
 		MiddleName: stringp("Perry"), // This works because pointer variable stores the address of the variable that contains the value of the variable
 		LastName:"Peterson",
 	}
+
+
+
+
+//Pointers Indicate Mutable Parameters
+// There is no mechanism in the language to declare that
+// other kinds of values are immutable
+
+/*
+Rather than declare that some variables and parameters are
+immutable, Go developers use pointers to indicate that a parameter is mutable.
+
+Since Go is a call by value language, the values passed to functions are copies.
+ For nonpointer types like primitives, structs, and arrays, this means that the called func‐
+tion cannot modify the original. Since the called function has a copy of the original
+data, the immutability of the original data is guaranteed.
+
+However, if a pointer is passed to a function, the function gets a copy of the pointer.
+This still points to the original data, which means that the original data can be modi‐
+fied by the called function.
+*/
+
+// impliactions
+// 1) if you pass  a nil poitner to a function , you cannot make the value non-nil. You can 
+// only reasssign a value if there was already a value assigned to the pointer
+
+// 2)if you want the value assigned to a
+// pointer parameter to still be there when you exit the function, you must dereference
+// the pointer and set the value. If you change the pointer, you have changed the copy,
+// not the original. Dereferencing puts the new value in the memory location pointed to
+// by both the original and the copy. Here’s a short program that shows how this works:
+func failedUpdate(px *int) {
+	x2 := 20
+	px = &x2 // updates the value in the copy pointer not the original
+}
+func update(px *int) {
+	*px = 20 // Deferencing updates the value in the memory location pointed by the original pointer
+}
+func main() {
+	x := 10
+	failedUpdate(&x) //copy the address of x into the parameter px
+	fmt.Println(x) // prints 10
+	update(&x)
+	fmt.Println(x) // prints 20
+}
+
+//Pointers Are a Last Resort
+
+
+
