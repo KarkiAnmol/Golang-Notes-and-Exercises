@@ -172,8 +172,8 @@ Nil pointers can be used to distinguish zero value in your program when the dist
 prefer to use it because using pointer means making the value mutable, so we instead prefer the comma ok idiom
 */
 
-//within the Go runtime, a map is imple‐
-// mented as a pointer to a struct. Passing a map to a function means that you are copy‐
+//within the Go runtime, a map is implemented as a pointer to a struct. 
+// Passing a map to a function means that you are copy‐
 // ing a pointer.this is why  any modifications made to a map that's passed to a function are reflected in the original value
 // that was passed in
 //Because of this, you should avoid using maps for input parameters or return values,
@@ -246,6 +246,17 @@ process(data[:count])
 
 //Reducing the Garbage Collector’s Workload
 /*
+Using buffers is just one example of how we reduce the work done by the garbage
+collector. When programmers talk about “garbage” what they mean is “data that has
+no more pointers pointing to it.”
+
+The job of a garbage collector is to automatically detect unused memory and
+recover it so it can be reused.
+
+Go is unusual in that it can actually increase the size of a stack
+while the program is running. This is possible because each gorout‐
+ine has its own stack and goroutines are managed by the Go run‐
+time, not by the underlying operating system
 
 */
 
