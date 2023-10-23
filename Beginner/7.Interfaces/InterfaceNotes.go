@@ -187,8 +187,112 @@ nil
 
 
 
-//If you find yourself in a situation where you had to store a value into an empty inter‐
-// face, you might be wondering how to read the value back again. To do that, we need
+//If you find yourself in a situation where you had to store a value into an empty inter‐face,
+//  you might be wondering how to read the value back again. To do that, we need
 // to look at type assertions and type switches.
 
 
+//Type Assertions and Type Switches
+// Go provides two ways to see if a variable of an interface type has a specific concrete
+// type or if the concrete type implements another interface.
+// A type assertion names the concrete type that implemented the interface,
+// or names another interface that is also implemented by the concrete type underlying
+// the interface.
+
+/*
+A type assertion is very different from a type conversion.
+Type conversions can be applied to both concrete types and interfaces and
+are checked at compilation time. 
+
+Type assertions can only be applied to interface types and are checked at runtime. Because they
+are checked at runtime, thhey can fail. 
+
+Conversions change, assertions reveal.
+*/
+type MyInt int
+func main() {
+	var i interface{}
+	var mine MyInt = 20
+	i = mine
+	i2 := i.(MyInt)
+	fmt.Println(i2 + 1) //21
+}
+
+i2 := i.(string) //wrong type asssertion  because i is of type MyInt
+fmt.Println(i2) 
+// Running this code produces the following panic:
+// panic: interface conversion: interface {} is main.MyInt, not string
+
+// Even if two types share
+// an underlying type, a type assertion must match the type of the underlying value. The
+// following code panics. 
+i2 := i.(int)
+fmt.Println(i2 + 1)
+
+// use comma ok idiom to avoid crashing
+i2, ok := i.(int)
+if !ok {
+return fmt.Errorf("unexpected type for %v",i)
+}
+fmt.Println(i2 + 1)
+
+
+// When an interface could be one of multiple possible types, use a type switch instead:
+	func doThings(i interface{}) {
+ 		switch j := i.(type) {
+		case nil:
+		// i is nil, type of j is interface{}
+		case int:
+		// j is of type int
+		case MyInt:
+		// j is of type MyInt
+		case io.Reader:
+		// j is of type io.Reader
+		case string:
+		// j is a string
+		case bool, rune:
+		// i is either a bool or rune, so j is of type interface{}
+		default:
+		// no idea what i is, so j is of type interface{}
+		}
+	}	
+
+//Use Type Assertions and Type Switches Sparingly
+
+//Type switch statements provide the ability to differentiate between multiple imple‐
+// mentations of an interface that require different processing. They are most useful
+// when there are only certain possible valid types that can be supplied for an interface
+
+
+
+//Function Types Are a Bridge to Interfaces
+
+
+// Go allows methods on any user-defined type, including user-defined function types.  They allow
+// functions to implement interfaces. The most common usage is for HTTP handlers.
+// An HTTP handler processes an HTTP server request. It’s defined by an interface:
+
+	type Handler interface {
+		ServeHTTP(http.ResponseWriter, *http.Request)
+	}
+// By using a type conversion to http.HandlerFunc, any function that has the signature
+// func(http.ResponseWriter,*http.Request) can be used as an http.Handler:
+
+type HandlerFunc func(http.ResponseWriter, *http.Request)
+func (f HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	f(w, r)
+}
+
+//If your single function is likely to depend on many other functions or other state
+// that’s not specified in its input parameters, use an interface parameter and define a
+// function type to bridge a function to the interface.
+
+
+// Implicit Interfaces Make Dependency Injection Easier
+/*
+Dependency injection is the concept
+that your code should explicitly specify the functionality it needs to perform its task.
+
+One of the surprising benefits of Go’s implicit interfaces is that they make depend‐
+ency injection an excellent way to decouple your code.
+*/
