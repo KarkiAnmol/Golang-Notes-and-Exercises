@@ -3,7 +3,7 @@
 //   1. using slice literal
       var x := []int{1,2,3}
 //   2. using nil
-      var x []int{}  //nil slice 
+      var x []int //nil slice 
 //   3. using make
       var x = make([]int, length, capacity) //to preassign type,length and optionally capacity to increase the speed 
 

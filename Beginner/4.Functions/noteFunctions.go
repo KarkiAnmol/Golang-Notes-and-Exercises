@@ -21,13 +21,13 @@ func MyFunc(opts MyFuncOpts) error {
 }
 func main() {
 	MyFunc(MyFuncOpts {
-	LastName: "Patel",
-	Age: 50,
-})
-My Func(MyFuncOpts {
-	FirstName: "Joe",
-	LastName: "Smith",
-})
+		LastName: "Patel",
+		Age: 50,
+	})
+    MyFunc(MyFuncOpts {
+		FirstName: "Joe",
+		LastName: "Smith",
+	})
 }
 
 //Variadic Input Parameters and Slices
@@ -241,8 +241,6 @@ func main() {
 going to be called from one other function, but it’s called multiple times, you can use
 an inner function to “hide” the called function. This reduces the number of declara‐
 tions at the package level, which can make it easier to find an unused name.)
-
- 2)  
 */
 
 
@@ -254,16 +252,16 @@ slice that’s passed in. Let’s see how it works by sorting a slice of a struc
 different fields.
 */
 
-type Person struct {
-		FirstName string
-		LastName string
-		Age int
-	}
+	type Person struct {
+			FirstName string
+			LastName string
+			Age int
+		}
 	people := []Person{
 		{"Pat", "Patterson", 37},
 		{"Tracy", "Bobbert", 23},
 		{"Fred", "Fredson", 18},
-	}
+		}
 	fmt.Println(people) // [{Pat Patterson 37} {Tracy Bobbert 23} {Fred Fredson 18}]
 
 	// Next, we’ll sort our slice by last name and print out the results:
@@ -289,18 +287,18 @@ closure, we can refer to people so we can sort it by the LastName field.
 // can also return a closure from a function.
 
 // Here is our function that returns a closure:
-func makeMult(base int) func(int) int {
-	return func(factor int) int {
-	return base * factor
-}
-}
+	func makeMult(base int) func(int) int {
+		return func(factor int) int {
+			return base * factor
+		}
+	}
 // And here is how we use it:
 func main() {
 	twoBase := makeMult(2)
 	threeBase := makeMult(3)
 
     for i := 0; i < 3; i++ {
-			fmt.Println(twoBase(i), threeBase(i))
+		fmt.Println(twoBase(i), threeBase(i))
 	}
 }
 
@@ -324,11 +322,11 @@ code is attached to the function with the defer keyword.
 // simple version of cat, the Unix utility for printing the contents of a file.
 
 func main() {
-	if len(os.Args) < 2 { // making sure the file name is specified on the command line by checking the length of os a slice in the os package that contains the name of the program
+	if len(os.Args) < 2 { // making sure the file name is specified on the command line by checking the length of os a 
+		// slice in the os package that contains the name of the program
 						  // launched and the arguments passed to it.
 		log.Fatal("no file specified")
 	}
-	
 	f, err := os.Open(os.Args[1]) //read-only file handle with the Open function in the os package
 	if err != nil { //if there is a problem opening the file
 		log.Fatal(err)
@@ -340,12 +338,12 @@ func main() {
 		count, err := f.Read(data)
 		os.Stdout.Write(data[:count])
 			if e4rr != nil {
-				if err != io.EOF {
-				log.Fatal(err)
-				}
-	break
-}
-}
+					if err != io.EOF {
+						log.Fatal(err)
+					}
+				break
+			}
+		}
 }
 
 //Few things to know about Defer keyword

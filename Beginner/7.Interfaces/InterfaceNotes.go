@@ -213,7 +213,7 @@ type MyInt int
 func main() {
 	var i interface{}
 	var mine MyInt = 20
-	i = mine
+	i = mine // interface i's type becomes 'MyInt'
 	i2 := i.(MyInt)
 	fmt.Println(i2 + 1) //21
 }
@@ -265,7 +265,7 @@ fmt.Println(i2 + 1)
 
 
 
-//Function Types Are a Bridge to Interfaces
+// Function Types Are a Bridge to Interfaces
 
 
 // Go allows methods on any user-defined type, including user-defined function types.  They allow

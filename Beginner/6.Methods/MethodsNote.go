@@ -8,7 +8,7 @@ type Person struct {
 	Age       int
 }
 
-//This should be read as declaring a user-defined type with the name Person to have the underlying type of struct literal that follows
+// This should be read as declaring a user-defined type with the name Person to have the underlying type of struct literal that follows
 // Not only struct literal you can use any primitive type or compound type literal to define a concrete type
 
 // few examples
@@ -16,10 +16,10 @@ type Score int
 type Converter func(string) Score
 type TeamScores map[string]Score
 
-//An abstract type is one that specifies what a type should
+// An abstract type is one that specifies what a type should
 // do, but not how it is done. A concrete type specifies what and how.
 
-//Methods
+// Methods
 // The methods for a type are defined at the package block level:
 type Person struct {
 	FirstName string
@@ -150,7 +150,7 @@ func main() {
 	f2 := Adder.AddTo
 	fmt.Println(f2(myAdder, 15)) // prints 25
 
-	// In the case of a method expression, the first parameter is the receiver for the method;
+// In the case of a method expression, the first parameter is the receiver for the method;
 // our function signature is func(Adder, int) int.
 
 
@@ -181,11 +181,12 @@ type Employee Person
 	var i int = 300
 	var s Score = 100
 	var hs HighScore = 200
-
+// assigning typed constants requires type conversion
 	hs = s // compilation error! You can’t assign an instance of type SCORE to a variable of type HIGHSCORE
+	hs = HighScore(s) // ok
+
 	s = i // compilation error!
 	s = Score(i)	// ok
-	hs = HighScore(s) // ok
 
 
 //when should you create a user defined type based on builtin types ?
@@ -200,7 +201,8 @@ type Employee Person
 Many programming languages (like APL, i.e. 'A Programming Language') have the concept of enumerations, where you can
 specify that a type can only have a limited set of values. Go doesn’t have an enumera‐
 tion type. Instead, it has iota, which lets you assign an increasing value to a set of
-constants.*/
+constants.
+*/
 
 // When using iota, the best practice is to first define a type based on int that will represent all of the valid values:
 		type MailCategory int
@@ -230,9 +232,9 @@ and so on.
 While Go doesn’t have inheritance, it encourages code reuse via built-in support for composition and promotion:
 */
 	type Employee struct {
-			Name string
-			ID string
-		}
+		Name string
+		ID string
+	}
 	func (e Employee) Description() string {
 		return fmt.Sprintf("%s (%s)", e.Name, e.ID)
 	}
@@ -263,7 +265,7 @@ While Go doesn’t have inheritance, it encourages code reuse via built-in suppo
 				X int
 			}
 		type Outer struct {
-				Inner
+				Inner //embedded
 				X int
 			}
 		// You can only access the X on Inner by specifying Inner explicitly:

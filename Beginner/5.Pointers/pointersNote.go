@@ -69,7 +69,8 @@ p := person{
 // With that function, you can now write:
 	p := person{
 		FirstName: "Pat",
-		MiddleName: stringp("Perry"), // This works because pointer variable stores the address of the variable that contains the value of the variable
+		MiddleName: stringp("Perry"), // This works because pointer variable stores the address of the variable that contains 
+									  // the value of the variable
 		LastName:"Peterson",
 	}
 
@@ -142,10 +143,10 @@ func MakeFoo() (Foo, error) {
 	return f, nil
 }
 
-//The only time you should use pointer parameters to modify a variable is when the
+// The only time you should use pointer parameters to modify a variable is when the
 // function expects an interface. You see this pattern when working with JSON
 
-//When returning values from a function, you should favor value types. Only use a
+// When returning values from a function, you should favor value types. Only use a
 // pointer type as a return type if there is state within the data type that needs to be  modified.
 
 
@@ -159,7 +160,7 @@ tion takes longer as the data gets larger. so it makes sense to use pointer to m
 //For data structures that are smaller than a megabyte, it is actually slower to return a
 // pointer type than a value type
 
-//For the vast majority of cases, the
+// For the vast majority of cases, the
 // difference between using a pointer and a value won’t affect your program’s perfor‐
 // mance. But if you are passing megabytes of data between functions, consider using a
 // pointer even if the data is meant to be immutable.
@@ -172,11 +173,11 @@ Nil pointers can be used to distinguish zero value in your program when the dist
 prefer to use it because using pointer means making the value mutable, so we instead prefer the comma ok idiom
 */
 
-//within the Go runtime, a map is implemented as a pointer to a struct. 
-// Passing a map to a function means that you are copy‐
-// ing a pointer.this is why  any modifications made to a map that's passed to a function are reflected in the original value
+// within the Go runtime, a map is implemented as a pointer to a struct. 
+// Passing a map to a function means that you are copying a pointer.
+// this is why  any modifications made to a map that's passed to a function are reflected in the original value
 // that was passed in
-//Because of this, you should avoid using maps for input parameters or return values,
+// Because of this, you should avoid using maps for input parameters or return values,
 // especially on public APIs
 
 // Go is a strongly typed language; rather than passing a map around, use a struct
@@ -193,10 +194,10 @@ prefer to use it because using pointer means making the value mutable, so we ins
 // changes are seen in both the copy and the original
 
 // Changes to the length and capacity are not reflected back in the original, because they are only in the copy.
-//  Changing the capacity means that the pointer is now pointing to a new, bigger block of memory.
+// Changing the capacity means that the pointer is now pointing to a new, bigger block of memory.
 
 
-//By default, you should assume that a slice is not modified by a function.
+// By default, you should assume that a slice is not modified by a function.
 // Your function’s documentation should specify if it modifies the slice’s contents.
 
 
