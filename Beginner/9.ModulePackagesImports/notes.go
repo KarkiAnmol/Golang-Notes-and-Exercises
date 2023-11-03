@@ -239,3 +239,88 @@ simply, an alias is a new name for a type
 	type Bar = Foo
 	// To create an alias, we use the type keyword, the name of the alias, an equals sign, and
 	// the name of the original type.
+
+
+
+//Working with Modules
+// Importing third party code
+/*
+Unlike many other compiled languages, Go compiles all code for your application
+into a single binary, whether it was code you wrote or code from third parties. Just as
+we saw when we imported a package from within our own project, when you import
+a third-party package, you specify the location in the source code repository where
+the package is located
+*/
+
+
+// //Working with Versions
+// we can see what versions of the module
+// are available with the go list command:
+$ go list -m -versions github.com/learning-go-book/simpletax
+github.com/learning-go-book/simpletax v1.0.0 v1.1.0
+//By default, the go list command lists the packages that are used in your project. The
+// -m flag changes the output to list the modules instead, and the -versions flag changes
+//go list to report on the available versions for the specified module
+
+// In this case, we
+// see that there are two versions, v1.0.0 and v1.1.0. Let’s downgrade to version v1.0.0
+// and see if that fixes our problem. We do that with the go get command:
+$ go get github.com/learning-go-book/simpletax@v1.0.0
+// The go get command lets us work with modules, updating the versions of our
+// dependencies.
+
+// Now if we look at go.mod, we’ll see the version has been changed:
+// module region_tax
+go 1.15
+require (
+	github.com/learning-go-book/simpletax v1.0.0
+	github.com/shopspring/decimal v1.2.0
+)
+// We also see in go.sum that it contains both versions of simpletax:
+	github.com/learning-go-book/simpletax v1.0.0 h1:iH+7ADkdyrSqrMR2GzuWS...
+	github.com/learning-go-book/simpletax v1.0.0/go.mod h1:/YqHwHy95m0M4Q...
+	github.com/learning-go-book/simpletax v1.1.0 h1:Z/6s1ydS/vjblI6PFuDEn...
+	github.com/learning-go-book/simpletax v1.1.0/go.mod h1:/YqHwHy95m0M4Q...
+// This is fine; if you change a module’s version, or even remove a module from your
+// project, there still might be an entry for it in go.sum. This doesn’t cause any problems.
+
+//For all major versions besides 0 and 1, the path to the module must end in vN,
+// where N is the major version.
+
+// First, we are going to change our import of
+// simpletax to:
+"github.com/learning-go-book/simpletax/v2"
+
+// This changes our import to refer to the v2 module.
+// Next, we’re going to change the code in main to the following:
+func main() {
+	amount, err := decimal.NewFromString(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	zip := os.Args[2]
+	country := os.Args[3]
+	percent, err := simpletax.ForCountryPostalCode(country, zip)
+	if err != nil {
+		log.Fatal(err)
+	}
+	total := amount.Add(amount.Mul(percent)).Round(2)
+	fmt.Println(total)
+}
+
+//Vendoring
+/*
+To ensure that a module always builds with identical dependencies, some organiza‐
+tions like to keep copies of their dependencies inside their module. This is known as
+vendoring.
+It’s enabled by running the command go mod vendor. This creates a direc‐
+tory called vendor at the top level of your module that contains all of your module’s
+dependencies.
+If new dependencies are added to go.mod or versions of existing dependencies are
+upgraded with go get, you need to run go mod vendor again to update the vendor
+directory. If you forget to do this, go build, go run, and go test will refuse to run
+and display an error message.
+The advantage of vendoring is that you know exactly
+what third-party code is going to be used by your project. The downside is that it dra‐
+matically increases the size of your project in version control
+*/
