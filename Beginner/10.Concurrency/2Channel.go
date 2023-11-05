@@ -10,6 +10,6 @@ func main() {
 		myNameChannel <- "anmol"
 	}()
 	name := <-myNameChannel // the main function waits to reads the value from the channel until the
-	// goroutine writtes in the empty channel
+	// goroutine writtes in the empty channel,this is the join point
 	fmt.Println(name)
 }
