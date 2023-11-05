@@ -24,7 +24,7 @@ The goroutine is the core concept in Go’s concurrency model.
 A process is an instance of a program that’s being run by a computer’s operating system
 The operating system associates some resources, such as memory, with the process and makes sure that
 other processes can’t access them. A process is composed of one or more threads. 
-A jthread is a unit of execution that is given some time to run by the operating system.
+A thread is a unit of execution that is given some time to run by the operating system.
 Threads within a process share access to resources.
 
 A CPU can execute instructions from one or more threads at the same time, depending on the number of cores.
@@ -114,7 +114,7 @@ empty buffer also blocks.
 //A buffered channel is created by specifying the capacity of the buffer when creating the channel:
 ch := make(chan int, 10)
 
-// len to find out how many values are currently in the buffer 
+// len to find out how many values are currently in the 'buffer' / 'buffered channel' 
 // cap to find out the maximum buffer size.
 
 //For-range and channels 
