@@ -220,3 +220,66 @@ if err != nil {
 
 // Finally, we print the retrieved data in a structured way:
 fmt.Printf("%+v\n", fromFile)
+
+
+
+
+//Encoding and Decoding JSON Streams
+// when you have multiple JSON structs to read or write at once json.Decoder and json.Encoder can be used
+func main() {
+	// JSON data with multiple objects
+	data := `{"name": "Fred", "age": 40}
+			{"name": "Mary", "age": 21}
+			{"name": "Pat", "age": 30}`
+
+	// Initialize a struct to store the JSON data
+	type Person struct {
+		Name string `json:"name"`
+		Age  int    `json:"age"`
+	}
+
+	// Reading multiple JSON objects using json.Decoder
+	// 
+	//initializes a new json.Decoder (i.e.'dec') by associating it with a string
+	// strings.NewReader creates a new io.Reader from the provided string data. 
+	// This function returns a *strings.Reader, which implements the io.Reader interface, 
+	// allowing reading from the provided string.
+	dec := json.NewDecoder(strings.NewReader(data))
+	var t Person //instance of the struct
+	// 
+	// The json.Decoder can then be used to decode and process JSON data from this string source 
+	// using its methods, such as More() to check for additional content and Decode() to decode JSON objects 
+	// one by one.
+    // dec.More() is a method of the json.Decoder that checks if there is more content to be decoded 
+	// from the input. It returns true if there is more content to read.
+	for dec.More() {
+		err := dec.Decode(&t) //decoding the next JSON object from the input source into the variable t, which should be a struct
+		if err != nil {
+			panic(err)
+		}
+		// Process t - Here you might perform actions with each decoded object
+		fmt.Printf("Name: %s, Age: %d\n", t.Name, t.Age)
+	}
+
+	// Writing multiple values using json.Encoder
+	var b bytes.Buffer
+	enc := json.NewEncoder(&b)
+	allInputs := []Person{
+		{Name: "Fred", Age: 40},
+		{Name: "Mary", Age: 21},
+		{Name: "Pat", Age: 30},
+	}
+
+	for _, input := range allInputs {
+		err := enc.Encode(input)
+		if err != nil {
+			panic(err)
+		}
+	}
+	out := b.String()
+	fmt.Println("Encoded JSON:", out)
+
+	// Additional note: Reading a single object from an array using json.Decoder
+	// This can be done to process JSON objects within an array without loading the entire array into memory at once.
+	// Refer to the Go documentation for an example demonstrating this approach.
+}
