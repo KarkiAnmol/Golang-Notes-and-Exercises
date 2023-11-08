@@ -6,10 +6,12 @@ import (
 
 // sliceToChannel function converts the slice into channel
 func sliceToChannel(nums []int) <-chan int {
-	out := make(chan int)
+	out := make(chan int) //unbuffered channel
 	go func() {
 		for _, v := range nums {
-			out <- v
+			out <- v //after write this go routine waits until the value from out
+			// channel is read because it is unbuffered channel (another function 'sq'
+			//  reads from this channel so the both goroutines are running concurrently)
 		}
 		close(out)
 	}()
