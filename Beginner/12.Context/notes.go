@@ -125,3 +125,130 @@ func (sc ServiceCaller) callAnotherService(ctx context.Context, data string) (st
 // by wrapping an existing parent context with a child context. This allows us to use contexts
 // to pass information into deeper layers of the code. The context is never used to pass information
 // out of deeper layers to higher layers.
+// servers.go
+// slowServer simulates a slow HTTP server response.
+func slowServer() *httptest.Server {
+    s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        time.Sleep(2 * time.Second)
+        w.Write([]byte("Slow response"))
+    }))
+    return s
+}
+
+// fastServer simulates a fast HTTP server response with optional error handling.
+func fastServer() *httptest.Server {
+    s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        if r.URL.Query().Get("error") == "true" {
+            w.Write([]byte("error"))
+            return
+        }
+        w.Write([]byte("ok"))
+    }))
+    return s
+}
+// The functions set up two HTTP servers. One sleeps for two seconds, returning "Slow response," while 
+// the other checks for a query parameter "error." If true, it responds with "error"; otherwise,
+//  it returns "ok." The code uses httptest.Server for testing interactions with remote servers
+//   within the same program. The next step involves writing the client part in client.go.
+
+// client.go
+var client = http.Client{}
+
+// callBoth initiates calls to both slow and fast servers with cancellation support.
+func callBoth(ctx context.Context, errVal string, slowURL string, fastURL string) {
+    ctx, cancel := context.WithCancel(ctx)
+    defer cancel()
+
+    var wg sync.WaitGroup
+    wg.Add(2)
+
+    // Concurrently call slow and fast servers
+    go func() {
+        defer wg.Done()
+        err := callServer(ctx, "slow", slowURL)
+        if err != nil {
+            cancel()
+        }
+    }()
+
+    go func() {
+        defer wg.Done()
+        err := callServer(ctx, "fast", fastURL+"?error="+errVal)
+        if err != nil {
+            cancel()
+        }
+    }()
+
+    // Wait for both calls to complete
+    wg.Wait()
+    fmt.Println("done with both")
+}
+
+// callServer performs an HTTP call and handles errors and cancellations.
+func callServer(ctx context.Context, label string, url string) error {
+    req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+    if err != nil {
+        fmt.Println(label, "request err:", err)
+        return err
+    }
+
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println(label, "response err:", err)
+        return err
+    }
+
+    data, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        fmt.Println(label, "read err:", err)
+        return err
+    }
+
+    result := string(data)
+    if result != "" {
+        fmt.Println(label, "result:", result)
+    }
+
+    if result == "error" {
+        fmt.Println("cancelling from", label)
+        return errors.New("error happened")
+    }
+
+    return nil
+}
+// In this code segment, the callBoth function is central. It establishes a 
+// cancellable context and a corresponding cancel function from the provided
+//  context. Two concurrent processes are then launched, each utilizing the 
+//  cancellable context, a label, and a URL when calling the callServer function. 
+//  The program waits for both processes to complete, invoking the cancel function upon any reported error.
+// main.go
+
+// main.go
+// main initializes servers, creates a context, and calls the clients with the context and server URLs.
+func main() {
+    ss := slowServer()
+    defer ss.Close()
+
+    fs := fastServer()
+    defer fs.Close()
+
+    ctx := context.Background()
+    callBoth(ctx, os.Args[1], ss.URL, fs.URL)
+}
+	
+	
+// Here’s what happens if you run without an error:
+	$ make run-ok
+	go build
+	./context_cancel false
+	fast result: ok
+	slow result: Slow response
+	done with both
+// And here’s what happens if an error is triggered:
+	$ make run-cancel
+	go build
+	./context_cancel true
+	fast result: error
+	cancelling from fast
+	slow response err: Get "http://127.0.0.1:38804": context canceled
+	done with both
