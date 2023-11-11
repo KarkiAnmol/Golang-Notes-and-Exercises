@@ -252,3 +252,16 @@ func main() {
 	cancelling from fast
 	slow response err: Get "http://127.0.0.1:38804": context canceled
 	done with both
+
+
+//Context Example
+
+// First runs a set of Queries and returns the result from the first to respond,cancelling the others
+func First(ctx context.Context,urls []string) (*Result,error){
+    c:= make(chanResult,len(urls))
+    ctx, cancel := context.WithCancel(ctx)
+    defer cancel()
+    search := func (url string){
+        c <- runQuery(ctx,url)
+    }
+}
